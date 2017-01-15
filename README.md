@@ -14,8 +14,8 @@ You can dowload and use the box with the Vagrantfile.  Development boxes are inc
 
 #### Requirements
 You must install vagrant, virtualbox, and the below plugins
-`vagrant install plugin vagrant-hostmanager`
-`vagrant plugin install vagrant-triggers`
+- `vagrant install plugin vagrant-hostmanager`
+- `vagrant plugin install vagrant-triggers`
 
 | Environment | Use Case |
 |-------------|----------|
