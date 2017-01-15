@@ -1,0 +1,74 @@
+=begin
+@author:  Charleston Malkemus
+@date:    February 15, 2016
+@app:     LoopBack
+@descriptions:
+Building loopback box
+
+=end
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+Vagrant.require_version ">= 1.6.0"
+
+Vagrant.configure("2") do |config|
+  config.ssh.forward_agent = true
+
+# CONFIGURE HOSTMANAGER
+# 
+# manage pretty url writing
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
+
+  # CONFIGURE API SERVER (loopback)
+  # 
+  # set hostname, network, and aliases
+    config.vm.define "api", primary: true do |api|
+      api.vm.box = "loopback"
+      api.ssh.username = "vagrant"
+      api.vm.hostname = "loopback"
+      api.vm.network :private_network, ip: '192.168.42.51'
+      api.vm.network :forwarded_port, guest: 3000, host: 3000
+
+    # SYNC FOLDERS 
+    # 
+    # loopback should be in /var/api/...
+    # sync local with vm folders
+      api.vm.synced_folder ".", "/var/api/", type: "nfs"
+
+
+    # PRETTY URL
+    #
+    # set pretty url
+      api.hostmanager.aliases = %w(loopback)
+
+    # SET RESOURCES
+    #
+    # box must have min 1GB and 50% CPU
+    # set provider
+      api.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+        vb.memory = "1024"
+        vb.cpus = "1"
+      end
+
+    # START UP LOOPBACK
+    #  
+    # restart loopback on vm after up
+      api.trigger.after :up do
+        run_remote "node ."
+      end
+    end
+  #
+  # END API SERVER (loopback)
+
+
+# VAGRANT MESSAGE
+  config.vm.post_up_message = "LoopBack is ready!"
+end
