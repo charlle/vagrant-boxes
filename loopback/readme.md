@@ -1,16 +1,10 @@
-/* 	
-*	BUILDING LOOPBACK
-*	First we are going to build our LoopBack API server with Vagrant, 
-*	then we are going to build a box and package it.  This way we don't 
-*	lose everyting when we `vagrant destroy`
-*
-* vbox min requirments = 1GB RAM 50% CPU
-*	ref: http://friendsofvagrant.github.io
-* ref: 
-*
-* vbox & unison versions need to match
-* 
-*/
+### BUILDING LOOPBACK
+First we are going to build our LoopBack API server with Vagrant, 
+then we are going to build a box and package it.  This way we don't 
+lose everyting when we `vagrant destroy`
+- vbox min requirments = 1GB RAM 50% CPU
+- ref: http://friendsofvagrant.github.io
+
 
 ### Contents
 - [Vagrant Install](#vagrant_install)
