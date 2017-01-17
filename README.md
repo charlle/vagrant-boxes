@@ -36,6 +36,12 @@ You must install vagrant, virtualbox, and the below plugins
 - build other boxes
 
 
+#### Mongo Best Practices
+- [MongoDB](https://blog.engineyard.com/2011/mongodb-best-practices)
+- [Schema](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-1)
+- [Performance](https://www.sitepoint.com/7-simple-speed-solutions-mongodb/)
+
+
 
 
 

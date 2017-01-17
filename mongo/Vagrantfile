@@ -1,0 +1,85 @@
+=begin
+@author:  Charleston Malkemus
+@date:    February 15, 2016
+@app:     Mongo Database
+@descriptions:
+Building MongoDB box
+
+=end
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+Vagrant.require_version ">= 1.6.0"
+
+Vagrant.configure("2") do |config|
+  config.ssh.forward_agent = true
+
+# CONFIGURE HOSTMANAGER
+# 
+# manage pretty url writing
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
+
+  # CONFIGURE MONGO SERVER (mongo)
+  # 
+  # set hostname, network, and aliases
+    config.vm.define "mongo", primary: true do |mongo|
+      mongo.vm.box = "mongo"
+      mongo.ssh.username = "vagrant"
+      mongo.vm.hostname = "mongo"
+      mongo.vm.network :private_network, ip: '192.168.42.100'
+      mongo.vm.network :forwarded_port, guest: 27017, host: 27017
+
+    # SYNC FOLDERS 
+    # 
+    # mongo should be in /var/mongo/...
+    # sync local with vm folders
+      mongo.vm.synced_folder ".", "/var/data/", type: "nfs"
+
+
+    # PRETTY URL
+    #
+    # set pretty url
+      mongo.hostmanager.aliases = %w(mongo)
+
+    # SET RESOURCES
+    #
+    # box must have min 256MB and 25% CPU
+    # set provider
+      mongo.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--cpuexecutioncap", "25"]
+        vb.memory = "256"
+        vb.cpus = "1"
+      end
+
+    # START UP MONGO
+    #  
+    # restore mongo data
+    # restart mongo on vm after up
+      mongo.trigger.after :up do
+        run_remote "mongorestore -d atlas /var/data/" 
+        run_remote "sudo service mongod --journal --fork start "
+      end
+    end
+
+    # SHUTDOWN MONGO
+    #  
+    # dump mongo data
+      mongo.trigger.before :destroy do
+        run_remote "mongodump -d atlas -o=/var/data/ -v" 
+        run_remote "sudo service mongod stop"
+      end
+    end
+  #
+  # END MONGO SERVER (mongo)
+
+
+# VAGRANT MESSAGE
+  config.vm.post_up_message = "Mongo is ready!"
+end

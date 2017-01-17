@@ -122,12 +122,13 @@ end
   sudo apt-get autoremove
   sudo apt-get clean
 
-	sudo dd if=/dev/zero of=/EMPTY bs=1M
+    sudo dd if=/dev/zero of=/EMPTY bs=1M
 	sudo rm -f /EMPTY
 	cat /dev/null > ~/.bash_history && history -c && exit
 
 	vagrant package --output loopback.box
-	vagrant destroy
+  vagrant box add loopback.box --name loopback
+  vagrant destroy
 ```
 
 
