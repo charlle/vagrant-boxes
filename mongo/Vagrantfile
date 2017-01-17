@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
       mongo.vm.box = "mongo"
       mongo.ssh.username = "vagrant"
       mongo.vm.hostname = "mongo"
-      mongo.vm.network :private_network, ip: '192.168.42.100'
+      mongo.vm.network :private_network, ip: '188.123.55.100'
       mongo.vm.network :forwarded_port, guest: 27017, host: 27017
 
     # SYNC FOLDERS 
@@ -50,11 +50,11 @@ Vagrant.configure("2") do |config|
 
     # SET RESOURCES
     #
-    # box must have min 256MB and 25% CPU
+    # box must have min 1GB and 25% CPU
     # set provider
       mongo.vm.provider "virtualbox" do |vb|
         vb.customize ["modifyvm", :id, "--cpuexecutioncap", "25"]
-        vb.memory = "256"
+        vb.memory = "1024"
         vb.cpus = "1"
       end
 
@@ -66,7 +66,6 @@ Vagrant.configure("2") do |config|
         run_remote "mongorestore -d atlas /var/data/" 
         run_remote "sudo service mongod --journal --fork start "
       end
-    end
 
     # SHUTDOWN MONGO
     #  
@@ -75,6 +74,7 @@ Vagrant.configure("2") do |config|
         run_remote "mongodump -d atlas -o=/var/data/ -v" 
         run_remote "sudo service mongod stop"
       end
+      
     end
   #
   # END MONGO SERVER (mongo)

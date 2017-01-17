@@ -51,7 +51,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "mongo", primary: true do |mongo|
     mongo.ssh.username = "vagrant"
     mongo.vm.hostname = "mongo"
-    mongo.vm.network :private_network, ip: '192.168.42.100'
+    mongo.vm.network :private_network, ip: '188.123.55.100'
     mongo.vm.network :forwarded_port, guest: 27017, host: 27017
 
   # SYNC FOLDERS 
@@ -97,20 +97,24 @@ echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3
 sudo apt-get update
 sudo apt-get install -y mongodb-org
 
-sudo mkdir /var/data
 
 # mongo files are in this folder
-sudo chown -R $USER /var/lib/mongodb/
-sudo chown -R $USER /var/data
-```
-Check that mongo was successfully installed. `sudo service mongod start`
-If you run into problems either start over or attempt to repair the database. `mongod --repair --dbpath /var/lib/mongodb --storageEngine wiredTiger`
+sudo chmod 777 /var/lib/mongodb/
 
+# mongo config is here
+sudo vim /etc/mongod.conf
+# comment out bind ip address
+
+# check service is working
+sudo service mongod start
+sudo service mongod stop
+```
+
+If you run into problems either start over or attempt to repair the database. `mongod --repair --dbpath /var/lib/mongodb --storageEngine wiredTiger`
 
 #### PACKAGE BOX
 ```
 # clean up and package your box
-sudo service mongod stop
 sudo apt-get autoremove
 sudo apt-get clean
 
