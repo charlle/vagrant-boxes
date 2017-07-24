@@ -4,7 +4,7 @@ You can review the Vagrantfiles if you would like to customize and package the b
 You can dowload and use the box with the Vagrantfile.  Development boxes are included in the `boxes` folder.
 
 #### Contents
-- [Requirements](#requirements)
+- [Setup](#setup)
 - [Boxes](#boxes)
 - [Nginx](#nginx)
 - [Express](#express) 
@@ -13,10 +13,20 @@ You can dowload and use the box with the Vagrantfile.  Development boxes are inc
 - [Data](#data) 
 
 
-#### Requirements
-You must install vagrant, virtualbox, and the below plugins
-- `vagrant plugin install vagrant-hostmanager`
+#### Setup
+1. **Vagrant**: Download the (mac) client: [https://www.vagrantup.com/downloads.html](https://www.vagrantup.com/downloads.html)
+2. **Virtualbox**: Download and install for (OS X): [https://www.virtualbox.org](https://www.virtualbox.org)
+3. Install These Vagrant Plugins
 - `vagrant plugin install vagrant-triggers`
+- `vagrant plugin install vagrant-hostmanager` 
+
+
+
+
+
+
+
+
 
 
 #### Boxes
