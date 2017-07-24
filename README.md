@@ -6,11 +6,6 @@ You can dowload and use the box with the Vagrantfile.  Development boxes are inc
 #### Contents
 - [Setup](#setup)
 - [Boxes](#boxes)
-- [Nginx](#nginx)
-- [Express](#express) 
-- [Loopback](#loopback)
-- [Hapi](#hapi)
-- [Data](#data) 
 
 
 #### Setup
@@ -21,7 +16,6 @@ You can dowload and use the box with the Vagrantfile.  Development boxes are inc
 - `vagrant plugin install vagrant-triggers`
 - `vagrant plugin install vagrant-hostmanager` 
  
-
 
 #### Boxes
 | Environment | Use Case |
