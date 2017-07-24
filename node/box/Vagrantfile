@@ -1,21 +1,10 @@
-=begin
-@author:  Charleston Malkemus
-@date:    February 15, 2016
-@app:     Nginx Server
-@descriptions:
-This is a bare bones web and proxy server
-cpu = 15%
-mem = 256
-
-=end
-
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 Vagrant.require_version ">= 1.6.0"
 
 Vagrant.configure("2") do |config|
+
+  config.vm.box = "bento/ubuntu-16.04"
+  config.vm.box_url = "https://vagrantcloud.com/bento/ubuntu-16.04"
   config.ssh.forward_agent = true
 
 # CONFIGURE HOSTMANAGER
@@ -28,50 +17,52 @@ Vagrant.configure("2") do |config|
   config.hostmanager.include_offline = true
 
 
-  # CONFIGURE WEB SERVER (nginx)
+# CONFIGURE NODE SERVER
+# 
+# set hostname, network, and aliases
+  config.vm.define "node", primary: true do |node|
+    node.ssh.username = "vagrant"
+    node.vm.hostname = "node"
+    node.vm.network :private_network, ip: '192.168.42.51'
+    node.vm.network :forwarded_port, guest: 3451, host: 3451
+
+  # SYNC FOLDERS 
   # 
-  # set hostname, network, and aliases
-    config.vm.define "web", primary: true do |web|
-      web.vm.box = "nginx"
-      web.ssh.username = "vagrant"
-      web.vm.hostname = "nginx"
-      web.vm.network :private_network, ip: '192.168.42.51'
-      web.vm.network :forwarded_port, guest: 3451, host: 3451
+  # node apps should be in /var/app...
+  # sync local with vm folders
+    node.vm.synced_folder "app/", "/var/app/", type: "nfs"
+    node.vm.synced_folder "app/config/", "/etc/nginx/sites-available/", type: "nfs"
 
-    # SYNC FOLDERS 
-    # 
-    # nginx should be in /var/...
-    # sync local with vm folders
-      web.vm.synced_folder "web/", "/var/web/", type: "nfs"
-      web.vm.synced_folder "web/config/", "/etc/nginx/sites-available/", type: "nfs"
-      web.sync.host_folder = "web/"
-      web.sync.guest_folder = "/var/web/"
+  # set pretty url
+    node.hostmanager.aliases = %w(node)
 
-    # PRETTY URL
-    #
-    # set pretty url
-      web.hostmanager.aliases = %w(nginx.vm)
-    
-    # SET RESOURCES
-    #
-    # box must have min 256MB and 15% CPU
-    # set provider
-      web.vm.provider "virtualbox" do |vb|
-        vb.customize ["modifyvm", :id, "--cpuexecutioncap", "15"]
-        vb.memory = "256"
-        vb.cpus = "1"
-      end
-
-    # START UP NGINX
-    #  
-    # restart nginx on guest after up
-      web.trigger.after :up do
-        run_remote "sudo service nginx restart"
-      end
-    end
+  # SET RESOURCES
   #
-  # END WEB SERVER (nginx)
+  # box must have min 256MB and 25% CPU
+  # set provider
+    node.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--cpuexecutioncap", "25"]
+      vb.memory = "256"
+      vb.cpus = "1"
+    end
 
+  # INSTALL NODE, PM2, NGINX
+   node.vm.provision "shell", inline: <<-SHELL
+    sudo su -
+    cd /var/app/
+    apt-get upgrade
+    apt-get install -y vim git curl build-essential openssl libssl-dev pkg-config 
+    apt-get install -y software-properties-common python-software-properties
+    curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
+    bash nodesource_setup.sh
+    apt-get install nodejs
+    npm install -g pm2
+    pm2 startup systemd
+    apt-get install -y nginx 
+    apt-get update 
+  SHELL
+    
+  end
 
 # VAGRANT MESSAGE
   config.vm.post_up_message = "You're ready!"
