@@ -23,28 +23,17 @@ You can dowload and use the box with the Vagrantfile.  Development boxes are inc
  
 
 
-
-
-
-
-
-
-
 #### Boxes
 | Environment | Use Case |
 |-------------|----------|
-| Nginx       | Reverse proxy |
+| Nginx       | [Reverse proxy](/nginx) |
+| Node        | [Node with Nginx](/node) |
 | Express     | Node Web server |
 | Loopback    | Node API server |
 | Hapi        | Node API server |
 | Data        | Redis, Mongo, MySql |
 
 
-
-#### TO DO
-- Add notes on how to install vagrant
-- virtualbox
-- build other boxes
 
 
 #### Mongo Best Practices
