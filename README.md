@@ -14,12 +14,13 @@ You can dowload and use the box with the Vagrantfile.  Development boxes are inc
 
 
 #### Setup
-1. **Vagrant**: Download the (mac) client: [https://www.vagrantup.com/downloads.html](https://www.vagrantup.com/downloads.html)
-2. **Virtualbox**: Download and install for (OS X): [https://www.virtualbox.org](https://www.virtualbox.org)
-3. Install These Vagrant Plugins
+1. **Vagrant**: Download the (mac) client - [https://www.vagrantup.com/downloads.html](https://www.vagrantup.com/downloads.html)
+2. **Virtualbox**: Download and install for (OS X) - [https://www.virtualbox.org](https://www.virtualbox.org)
+3. **Ngrok**: Install for sharing - [https://ngrok.com/download](https://ngrok.com/download)
+4. Install These Vagrant Plugins
 - `vagrant plugin install vagrant-triggers`
 - `vagrant plugin install vagrant-hostmanager` 
-
+ 
 
 
 

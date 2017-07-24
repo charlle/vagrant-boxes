@@ -96,8 +96,11 @@ cat /dev/null > ~/.bash_history && history -c && exit
 ```
 vagrant package --output node.box
 vagrant destroy
-vagrant box add node node.box
 ```
+You can either upload the box to Vagrant Cloud or use it locally.
+- Local: `vagrant box add node node.box`
+- Vagrant Cloud: [Signup with Atlas](https://atlas.hashicorp.com/help/vagrant/boxes/create)
+
 
 
 ### Deploying Node
@@ -124,7 +127,8 @@ Vagrant.configure("2") do |config|
   # 
   # set hostname, network, and aliases
     config.vm.define "node", primary: true do |node|
-      node.vm.box = "node"
+      node.vm.box = "charlle/node"
+      node.vm.box_version = "1.0"
       node.ssh.username = "vagrant"
       node.vm.hostname = "node"
       node.vm.network :private_network, ip: '192.168.42.51'
