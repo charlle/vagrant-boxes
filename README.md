@@ -1,9 +1,9 @@
-### Local Environments
+## Local Environments
 These are local development environments.
 You can review the Vagrantfiles if you would like to customize and package the boxes.
 You can dowload and use the box with the Vagrantfile.  Development boxes are included in the `boxes` folder.
 
-#### Contents
+### Contents
 - [Setup](#setup)
 - [Boxes](#boxes)
 
