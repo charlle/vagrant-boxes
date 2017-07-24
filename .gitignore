@@ -1,0 +1,7 @@
+## Git Ignore These Files
+
+# Vagrant Packaged Boxes
+*.box
+
+# Mac Storage
+*.DS_Store
