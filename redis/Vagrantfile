@@ -1,9 +1,9 @@
 =begin
 @author:  Charleston Malkemus
-@date:    February 15, 2016
-@app:     LoopBack
+@date:    September 13, 2017
+@app:     Redis Database
 @descriptions:
-Building loopback box
+Building redis box
 
 =end
 
@@ -15,8 +15,7 @@ Vagrant.require_version ">= 1.6.0"
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.box_url = "https://github.com/kraksoft/vagrant-box-ubuntu/releases/download/14.04/ubuntu-14.04-amd64.box"
+  config.vm.box = "bento/ubuntu-16.04"
   config.ssh.forward_agent = true
 
 # CONFIGURE HOSTMANAGER
@@ -29,28 +28,30 @@ Vagrant.configure("2") do |config|
   config.hostmanager.include_offline = true
 
 
-# CONFIGURE API SERVER (loopback)
+# CONFIGURE REDIS SERVER (redis)
 # 
 # set hostname, network, and aliases
-  config.vm.define "api", primary: true do |api|
-    api.ssh.username = "vagrant"
-    api.vm.hostname = "loopback"
+  config.vm.define "redis", primary: true do |redis|
+    redis.ssh.username = "vagrant"
+    redis.vm.hostname = "redis"
+    redis.vm.network :private_network, ip: '123.123.55.100'
+    redis.vm.network :forwarded_port, guest: 6379, host: 6379
 
   # SYNC FOLDERS 
   # 
-  # loopback should be in /var/...
+  # redis should be in /var/...
   # sync local with vm folders
-    api.vm.synced_folder ".", "/var/api/"
+    redis.vm.synced_folder ".", "/var/data/"
 
   # set pretty url
-    api.hostmanager.aliases = %w(loopback)
+    redis.hostmanager.aliases = %w(redis)
 
   # SET RESOURCES
   #
-  # box must have min 1GB and 50% CPU
+  # box must have min 1GB and 25% CPU
   # set provider
-    api.vm.provider "virtualbox" do |vb|
-      vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+    redis.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--cpuexecutioncap", "25"]
       vb.memory = "1024"
       vb.cpus = "1"
     end
@@ -58,5 +59,5 @@ Vagrant.configure("2") do |config|
   end
 
 # VAGRANT MESSAGE
-  config.vm.post_up_message = "You're ready!"
+  config.vm.post_up_message = "Ubuntu is ready!"
 end

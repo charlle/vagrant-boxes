@@ -1,5 +1,5 @@
 ### BUILDING MONGODB
-First we are going to build our LoopBack API server with Vagrant, 
+First we are going to build our MONGO DB server with Vagrant, 
 then we are going to build a box and package it.  This way we don't 
 lose everyting when we `vagrant destroy`
 - vbox min requirments = 1GB RAM 50% CPU
