@@ -16,7 +16,7 @@ Vagrant.require_version ">= 2.0.0"
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/xenial64"
   config.ssh.forward_agent = true
 
 # CONFIGURE NODE SERVER
@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
   # node apps should be in /var/app...
   # sync local with vm folders
     node.vm.synced_folder "app/", "/var/app/", type: "nfs"
-    node.vm.synced_folder "app/config/", "/etc/nginx/sites-available/", type: "nfs"
+    node.vm.synced_folder "config/", "/etc/nginx/sites-available/", type: "nfs"
 
   # set pretty url
     node.hostmanager.aliases = %w(node)
@@ -52,16 +52,14 @@ Vagrant.configure("2") do |config|
    node.vm.provision "shell", inline: <<-SHELL
     sudo su -
     cd /var/app/
-    apt-get upgrade
     apt-get install -y vim git curl build-essential openssl libssl-dev pkg-config 
     apt-get install -y software-properties-common python-software-properties
-    curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
-    bash nodesource_setup.sh
+    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
     apt-get install nodejs
+    npm install -g npm@latest
     npm install -g pm2
     pm2 startup systemd
     apt-get install -y nginx 
-    apt-get update 
   SHELL
     
   end
@@ -73,6 +71,8 @@ end
 
 *Clean Up*
 ```
+sudo apt-get upgrade
+sudo apt-get update 
 sudo apt-get autoremove
 sudo apt-get clean
 
