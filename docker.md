@@ -62,4 +62,7 @@ docker-machine ls
 ## Register Swarm
 docker-machine ssh myvm1 "docker swarm init --advertise-addr (ip given, ex. 192.168.99.100)"
 
+
+## Quick Start Ubuntu
+docker run -i -t ubuntu /bin/bash
 ```
