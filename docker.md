@@ -65,4 +65,18 @@ docker-machine ssh myvm1 "docker swarm init --advertise-addr (ip given, ex. 192.
 
 ## Quick Start Ubuntu
 docker run -i -t ubuntu /bin/bash
+
+## SSH into Container
+docker exec -it <container name> /bin/bash
+
+## Add to /etc/hosts for speed
+127.0.0.1	localunixsocket.local
+
+## COMMON
+### Build image
+docker build -t postgres:eno .
+
+### Build container / mount host
+docker run -v "$(pwd)"/data:/var/lib/postgresql <container>
+docker run  --mount type=bind,source="$(pwd)"/data,/var/lib/postgresql <container>
 ```
