@@ -4,4 +4,4 @@
 *.box
 
 # Mac Storage
-*.DS_Store
+.DS_Store
